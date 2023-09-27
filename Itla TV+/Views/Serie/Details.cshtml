@@ -1,0 +1,16 @@
+﻿@model Application.ViewModels.SerieViewModel
+@{
+      ViewData["Title"] = "Details";
+}
+
+<h1>@Model.SerieName</h1>
+
+@{
+    string videoUrl = Model.VideoPath; 
+    string videoId = videoUrl.Split("watch?v=")[1]; 
+    string embedUrl = "https://www.youtube.com/embed/" + videoId; 
+}
+
+<div class="embed-responsive embed-responsive-16by9">
+  <iframe class="embed-responsive-item" src="@embedUrl" width="1000" height="400" allowfullscreen></iframe>
+</div>

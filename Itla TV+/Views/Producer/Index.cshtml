@@ -1,0 +1,48 @@
+﻿@model List<Application.ViewModels.ProducerViewModel>
+@{
+    ViewData["Title"] = "Producers";
+}
+
+<h1>Mantenimiento productoras</h1>
+
+<div class="container-fluid">
+
+    <div class="row mb-4">
+        <div class="col-3 offset-9">
+            <a asp-controller="Producer" asp-action="Create" class="btn btn-success">Nueva Productora</a>
+        </div>
+    </div>
+
+    <div class="row">
+
+        @if (Model == null || Model.Count == 0)
+        {
+            <h2>No hay nada para mostrar</h2>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-4 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-warning bg-opacity-75 text-dark">
+                            <h4>@item.ProducerName</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a asp-controller="Producer" asp-action="Edit" asp-route-id="@item.ProducerId" class="btn btn-info">Editar</a>
+                                    <a asp-controller="Producer" asp-action="Delete" asp-route-id="@item.ProducerId" class="btn btn-danger">Eliminar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        }
+
+
+    </div>
+
+</div>

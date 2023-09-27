@@ -1,0 +1,65 @@
+﻿@model Application.ViewModels.SaveSerieViewModel
+@{
+    bool editMode = Model.SerieId == 0 ? false : true;
+    string ImagePlaceholder = "https://ntvb.tmsimg.com/assets/p8696131_b_h10_aa.jpg?w=960&h=540";
+    string videoPlaceholder = "https://www.youtube.com/watch?v=r3sjpnDh79o";
+    ViewData["Title"] = "Save";
+}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card">
+                <div class="card-header bg-opacity-50 bg-success text-black">
+                    <h4>@(editMode ? $"Editando la serie: {Model.SerieName}" : "Creando nueva serie")</h4>
+                </div>
+                <div class="card-body">
+
+                    <form method="post" asp-controller="Serie" asp-action="@(editMode ? "Edit" : "Create")">
+                        <div class="mb-3">
+                            <label asp-for="SerieName" class="form-label">Nombre de la serie</label>
+                            <input asp-for="SerieName" type="text" class="form-control" placeholder="El señor de los anillos..." />
+                            <span asp-validation-for="SerieName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ImagePath" class="form-label">Imagen de portada</label>
+                            <input asp-for="ImagePath" type="text" class="form-control" placeholder="@ImagePlaceholder" />
+                            <span asp-validation-for="ImagePath" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="VideoPath" class="form-label">Enlance del video de youtube</label>
+                            <input asp-for="VideoPath" type="text" class="form-control" placeholder="@videoPlaceholder" />
+                            <span asp-validation-for="VideoPath" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ProducerId" class="form-label">Productora</label>
+                            <select asp-for="ProducerId " class="form-select" asp-items="@(new SelectList(Model.Producers, "ProducerId", "ProducerName"))">
+                                <option value="0">Seleccione una...</option>
+                            </select>
+                            <span asp-validation-for="ProducerId" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="PrimaryGenderId" class="form-label">Genero primario</label>
+                            <select asp-for="PrimaryGenderId " class="form-select" asp-items="@(new SelectList(Model.Genders, "GenderId", "GenderName"))">
+                                <option value="0">Seleccione una...</option>
+                            </select>
+                            <span asp-validation-for="PrimaryGenderId" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SecondaryGenderId" class="form-label">Genero secundario</label>
+                            <select asp-for="SecondaryGenderId " class="form-select" asp-items="@(new SelectList(Model.Genders, "GenderId", "GenderName"))">
+                                <option value="0"></option>
+                            </select>
+                        </div>
+
+                        <input type="hidden" asp-for="SerieId"/>
+
+                        <button class="btn btn-primary" type="submit">Guardar</button>
+                        <a class="btn btn-warning" asp-controller="Serie" asp-action="Index">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

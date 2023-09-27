@@ -1,0 +1,52 @@
+﻿@model List<Application.ViewModels.SerieViewModel> 
+@{
+      ViewData["Title"] = "Series";
+}
+
+<h1>Mantenimiento series</h1>
+
+<div class="container-fluid">
+
+    <div class="row mb-4">
+        <div class="col-3 offset-9">
+            <a asp-controller="Serie" asp-action="Create" class="btn btn-success">Nueva Serie</a>
+        </div>
+    </div>
+
+    <div class="row">
+
+        @if (Model == null || Model.Count == 0)
+        {
+            <h2>No hay nada para mostrar</h2>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-4 mb-4">
+                    <div class="card shadow-sm">
+                        <img class="db-placeholder-img card-img-top" width="406px" height="228px" src="@item.ImagePath" />
+
+                        <div class="card-body">
+                            <h4>@item.SerieName</h4>
+                            <p><strong>Productora:</strong> @item.Producer.ProducerName</p>
+                            <p><strong>Genero/os:</strong> @item.PrimaryGender.GenderName @if (item.SecondaryGender != null)
+                            {@("- " + item.SecondaryGender.GenderName)}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a asp-controller="Serie" asp-action="Edit" asp-route-id="@item.SerieId" class="btn btn-info">Editar</a>
+                                    <a asp-controller="Serie" asp-action="Delete" asp-route-id="@item.SerieId" class="btn btn-danger">Eliminar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        }
+
+
+    </div>
+
+</div>
+

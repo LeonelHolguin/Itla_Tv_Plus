@@ -1,0 +1,60 @@
+﻿@model Application.ViewModels.HomeViewModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<h1 class="mb-3">Itla Tv+</h1>
+
+<section class="d-flex justify-content-between">
+    <div class="mb-5 w-75">
+        <form method="post" asp-controller="Home" asp-action="Index">
+            <div class="input-group">
+                <div class="form-outline">
+                    <input type="search" id="form1" name="serieName" class="form-control">
+                    <label class="form-label" for="form1" style="margin-left: 0px;">Search</label>
+                    <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 47.2px;"></div><div class="form-notch-trailing"></div></div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+</section>
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        @if(Model == null || Model.Series.Count == 0) 
+        {
+            <h2>No hay nada para mostrar</h2>
+        } 
+        else 
+        {
+            @foreach(var item in Model.Series) 
+            {
+                <div class="col-4 mb-4">
+                    <div class="card shadow-sm">
+                        <img class="db-placeholder-img card-img-top" width="406px" height="228px" src="@item.ImagePath" />
+            
+                    <div class="card-body">
+                      <h4>@item.SerieName</h4>
+                      <p><strong>Productora:</strong> @item.Producer.ProducerName</p>
+                      <p><strong>Genero/os:</strong> @item.PrimaryGender.GenderName @if(item.SecondaryGender != null) { @("- " + item.SecondaryGender.GenderName) }</p>
+                      <div class="d-grid gap-2 col-6 mx-auto">
+                        <a asp-action="Details" asp-controller="Serie" asp-route-id="@item.SerieId" class="btn btn-primary">Ver más detalles</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            }
+
+        }
+
+
+     </div>
+
+</div>
