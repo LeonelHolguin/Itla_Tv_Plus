@@ -59,14 +59,9 @@ namespace Application.Services
             await _serieRepository.UpdateAsync(serieEntity);
         }
 
-        public async Task<List<SerieViewModel>> GetAllViewModel(string serieName = null/*, string producer = null*/)
+        public async Task<List<SerieViewModel>> GetAllViewModel(string serieName = null)
         {
             var serieList = await _serieRepository.GetAllAsync();
-            /*
-            if (!string.IsNullOrEmpty(producer))
-            {
-                serieList = serieList.Where(serie => serie.Producer!.ProducerName == producer).ToList();
-            }*/
             
             if (!string.IsNullOrEmpty(serieName))
             {
@@ -124,6 +119,37 @@ namespace Application.Services
             };
 
             return serieVW;
+        }
+
+        public async Task<List<SerieViewModel>> GetAllByProducerId(List<int> producersId)
+        {
+            var serieList = await _serieRepository.GetAllAsync();
+
+            serieList = serieList.Where(serie => producersId.Contains(serie.ProducerId)).ToList();
+
+            return serieList.Select(serie => new SerieViewModel
+            {
+                SerieId = serie.SerieId,
+                SerieName = serie.SerieName,
+                ImagePath = serie.ImagePath,
+                VideoPath = serie.VideoPath,
+                Producer = new ProducerViewModel
+                {
+                    ProducerId = serie.Producer!.ProducerId,
+                    ProducerName = serie.Producer.ProducerName
+                },
+                PrimaryGender = new GenderViewModel
+                {
+                    GenderId = serie.PrimaryGender!.GenderId,
+                    GenderName = serie.PrimaryGender.GenderName
+                },
+                SecondaryGender = serie.SecondaryGender == null ? null : new GenderViewModel
+                {
+                    GenderId = serie.SecondaryGender.GenderId,
+                    GenderName = serie.SecondaryGender.GenderName
+                }
+
+            }).ToList();
         }
 
         public async Task<SaveSerieViewModel> GetByIdSaveSerieViewModel(int id)

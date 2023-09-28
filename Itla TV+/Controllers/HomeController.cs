@@ -100,5 +100,47 @@ namespace Itla_TV_.Controllers
 
             return View(homeList);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Filter(List<int> producersId)
+        {
+            var homeList = new HomeViewModel();
+
+            var serieList = await _serieService.GetAllByProducerId(producersId);
+            var producerList = await _producerService.GetAllViewModel();
+
+            homeList.Series = serieList.Select(serie => new SerieViewModel
+            {
+                SerieId = serie.SerieId,
+                SerieName = serie.SerieName,
+                ImagePath = serie.ImagePath,
+                VideoPath = serie.VideoPath,
+                Producer = new ProducerViewModel
+                {
+                    ProducerId = serie.Producer!.ProducerId,
+                    ProducerName = serie.Producer.ProducerName
+                },
+                PrimaryGender = new GenderViewModel
+                {
+                    GenderId = serie.PrimaryGender!.GenderId,
+                    GenderName = serie.PrimaryGender.GenderName
+                },
+                SecondaryGender = serie.SecondaryGender == null ? null : new GenderViewModel
+                {
+                    GenderId = serie.SecondaryGender.GenderId,
+                    GenderName = serie.SecondaryGender.GenderName
+                }
+
+            }).ToList();
+
+            homeList.Producers = producerList.Select(producer => new ProducerViewModel
+            {
+                ProducerId = producer.ProducerId,
+                ProducerName = producer.ProducerName
+
+            }).ToList();
+
+            return View("Index",  homeList);
+        }
     }
 }

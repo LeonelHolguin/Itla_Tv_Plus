@@ -21,6 +21,33 @@
         </form>
     </div>
 
+    <div>
+        <form method="post" asp-controller="Home" asp-action="Filter" class="d-flex">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Selecciona una opción
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    @foreach(var item in Model.Producers)
+                    {
+                        <label class="dropdown-item">
+                            <input type="checkbox" name="producersId" value=@item.ProducerId> @item.ProducerName
+                        </label>
+
+                    }
+                    <label class="dropdown-item">
+                        <input type="checkbox" name="option2" value="Option 2"> Opción 2
+                    </label>
+                    <label class="dropdown-item">
+                        <input type="checkbox" name="option3" value="Option 3"> Opción 3
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </form>
+
+    </div>
+
 
 </section>
 
@@ -28,33 +55,53 @@
 
     <div class="row">
 
-        @if(Model == null || Model.Series.Count == 0) 
+        @if (Model == null || Model.Series.Count == 0)
         {
             <h2>No hay nada para mostrar</h2>
-        } 
-        else 
+        }
+        else
         {
-            @foreach(var item in Model.Series) 
+            @foreach (var item in Model.Series)
             {
                 <div class="col-4 mb-4">
                     <div class="card shadow-sm">
                         <img class="db-placeholder-img card-img-top" width="406px" height="228px" src="@item.ImagePath" />
-            
-                    <div class="card-body">
-                      <h4>@item.SerieName</h4>
-                      <p><strong>Productora:</strong> @item.Producer.ProducerName</p>
-                      <p><strong>Genero/os:</strong> @item.PrimaryGender.GenderName @if(item.SecondaryGender != null) { @("- " + item.SecondaryGender.GenderName) }</p>
-                      <div class="d-grid gap-2 col-6 mx-auto">
-                        <a asp-action="Details" asp-controller="Serie" asp-route-id="@item.SerieId" class="btn btn-primary">Ver más detalles</a>
-                      </div>
+
+                        <div class="card-body">
+                            <h4>@item.SerieName</h4>
+                            <p><strong>Productora:</strong> @item.Producer.ProducerName</p>
+                            <p>
+                                <strong>Genero/os:</strong> @item.PrimaryGender.GenderName @if (item.SecondaryGender != null)
+                                {@("- " + item.SecondaryGender.GenderName)}
+                            </p>
+                            <div class="d-grid gap-2 col-6 mx-auto">
+                                <a asp-action="Details" asp-controller="Serie" asp-route-id="@item.SerieId" class="btn btn-primary">Ver más detalles</a>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
             }
 
         }
 
 
-     </div>
+    </div>
 
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Este código maneja el despliegue del menú
+        $(".dropdown-toggle").click(function () {
+            $(".dropdown-menu").toggle();
+        });
+
+        // Esto previene que se cierre cuando haces clic en el menú
+        $(".dropdown-menu").click(function (e) {
+            e.stopPropagation();
+        });
+    });
+</script>
+
